@@ -8,6 +8,8 @@ this is web application for keeping track of rfid card transactions
 
 - Express js
 
+- Mongodb
+
 - Socket.io
 
 - Preact
