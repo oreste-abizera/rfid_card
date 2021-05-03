@@ -5,8 +5,15 @@ import style from "./style.css";
 
 const ENDPOINT = "http://localhost:8081";
 
+interface Transaction {
+  cardId: String;
+  initial_balance: Number;
+  transaction_fare: Number;
+  new_balance: Number;
+}
+
 const Home: FunctionalComponent = () => {
-  const [transactions, settransactions] = useState("");
+  const [transactions, settransactions] = useState<Array<Transaction>>([]);
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
@@ -21,10 +28,24 @@ const Home: FunctionalComponent = () => {
 
   return (
     <div class={style.home}>
-      <h1>Home</h1>
-      <p>This is the Home component.</p>
+      <h1>List of transactions</h1>
+      <table>
+        <tr>
+          <th>Card id</th>
+          <th>Initial balance</th>
+          <th>Transaction fare</th>
+          <th>New Balance</th>
+        </tr>
 
-      <p>It's {JSON.stringify(transactions)}</p>
+        {transactions.map((transaction, index) => (
+          <tr key={index}>
+            <td>{transaction.cardId}</td>
+            <td>{transaction.initial_balance}</td>
+            <td>{transaction.transaction_fare}</td>
+            <td>{transaction.new_balance}</td>
+          </tr>
+        ))}
+      </table>
     </div>
   );
 };
