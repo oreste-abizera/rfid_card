@@ -10,6 +10,8 @@ const socketIo = require("socket.io");
 const cors = require("cors");
 const app = express();
 app.use(cors());
+app.use(express.json());
+const ErrorHandler = require("./middlewares/error");
 
 const port = process.env.PORT || 8081;
 const index = require("./routes/index");
@@ -44,5 +46,7 @@ const getApiAndEmit = async (socket) => {
   // Emitting a new message. Will be consumed by the client
   socket.emit("Transactions", response.transactions || []);
 };
+
+app.use(ErrorHandler);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
