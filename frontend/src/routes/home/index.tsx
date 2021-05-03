@@ -14,12 +14,15 @@ interface Transaction {
 }
 
 const Home: FunctionalComponent = () => {
+  const [loading, setloading] = useState<Boolean>(true);
   const [transactions, settransactions] = useState<Array<Transaction>>([]);
 
   useEffect(() => {
+    setloading(true);
     const socket = socketIOClient(ENDPOINT);
     socket.on("Transactions", (data) => {
       settransactions(data);
+      setloading(false);
     });
 
     // CLEAN UP THE EFFECT
@@ -37,15 +40,18 @@ const Home: FunctionalComponent = () => {
           <th>Transaction fare</th>
           <th>New Balance</th>
         </tr>
-
-        {transactions.map((transaction, index) => (
-          <tr key={index}>
-            <td>{transaction.cardId}</td>
-            <td>{transaction.initial_balance}</td>
-            <td>{transaction.transaction_fare}</td>
-            <td>{transaction.new_balance}</td>
-          </tr>
-        ))}
+        {loading ? (
+          <div style={{ marginTop: "1rem" }}>Loading...</div>
+        ) : (
+          transactions.map((transaction, index) => (
+            <tr key={index}>
+              <td>{transaction.cardId}</td>
+              <td>{transaction.initial_balance}</td>
+              <td>{transaction.transaction_fare}</td>
+              <td>{transaction.new_balance}</td>
+            </tr>
+          ))
+        )}
       </table>
 
       <button onClick={() => route("/create", true)}>Record transaction</button>
