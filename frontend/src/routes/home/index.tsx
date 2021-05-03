@@ -6,12 +6,12 @@ import style from "./style.css";
 const ENDPOINT = "http://localhost:8081";
 
 const Home: FunctionalComponent = () => {
-  const [response, setResponse] = useState("");
+  const [transactions, settransactions] = useState("");
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("Transactions", (data) => {
-      setResponse(data);
+      settransactions(data);
     });
 
     // CLEAN UP THE EFFECT
@@ -24,9 +24,7 @@ const Home: FunctionalComponent = () => {
       <h1>Home</h1>
       <p>This is the Home component.</p>
 
-      <p>
-        It's <time dateTime={response}>{response}</time>
-      </p>
+      <p>It's {JSON.stringify(transactions)}</p>
     </div>
   );
 };

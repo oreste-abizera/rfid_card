@@ -13,6 +13,7 @@ app.use(cors());
 
 const port = process.env.PORT || 8081;
 const index = require("./routes/index");
+const { loadTransactions } = require("./controllers/Transactions.Controller");
 
 app.use(index);
 
@@ -38,10 +39,10 @@ io.on("connection", (socket) => {
   });
 });
 
-const getApiAndEmit = (socket) => {
-  const response = new Date();
+const getApiAndEmit = async (socket) => {
+  let response = await loadTransactions();
   // Emitting a new message. Will be consumed by the client
-  socket.emit("Transactions", response);
+  socket.emit("Transactions", response.transactions || []);
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
