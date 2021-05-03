@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "preact/hooks";
 import style from "./style.css";
 
-const ENDPOINT = "http://127.0.0.1:8081";
+const ENDPOINT = "http://localhost:8081";
 
 const Home: FunctionalComponent = () => {
   const [response, setResponse] = useState("");
@@ -13,6 +13,10 @@ const Home: FunctionalComponent = () => {
     socket.on("Transactions", (data) => {
       setResponse(data);
     });
+
+    // CLEAN UP THE EFFECT
+    return () => socket.disconnect();
+    //
   }, []);
 
   return (
