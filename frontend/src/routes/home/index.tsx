@@ -2,6 +2,7 @@ import { FunctionalComponent, h } from "preact";
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "preact/hooks";
 import style from "./style.css";
+import { route } from "preact-router";
 
 const ENDPOINT = "http://localhost:8081";
 
@@ -46,6 +47,8 @@ const Home: FunctionalComponent = () => {
           </tr>
         ))}
       </table>
+
+      <button onClick={() => route("/create", true)}>Record transaction</button>
     </div>
   );
 };
