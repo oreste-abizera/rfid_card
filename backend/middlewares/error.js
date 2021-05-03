@@ -1,5 +1,6 @@
 const ErrorResponse = require("../utils/ErrorResponse");
 const ErrorHandler = (err, req, res, next) => {
+  console.log(err);
   let error = err;
   console.log("Error:".red.inverse + "  " + err);
 

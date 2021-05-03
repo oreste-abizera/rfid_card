@@ -10,12 +10,16 @@ module.exports.loadTransactions = async () => {
 };
 
 module.exports.createTransaction = async (req, res, next) => {
-  let transaction = await TransactionModel.create(req.body);
-  if (transaction) {
-    return res.json({
-      success: true,
-      transaction,
-    });
+  try {
+    let transaction = await TransactionModel.create(req.body);
+    if (transaction) {
+      return res.json({
+        success: true,
+        transaction,
+      });
+    }
+    return next(new ErrorResponse("Saving transaction failed."));
+  } catch (error) {
+    return next(new ErrorResponse("Saving transaction failed."));
   }
-  return next(new ErrorResponse("Saving transaction failed."));
 };

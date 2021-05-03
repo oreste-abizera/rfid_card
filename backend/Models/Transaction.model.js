@@ -5,16 +5,16 @@ const TransactionSchema = new mongoose.Schema({
     type: String,
     required: [true, "Card id is required"],
   },
-  intial_balance: {
-    type: Boolean,
+  initial_balance: {
+    type: Number,
     required: [true, "initial balance is required"],
   },
   transaction_fare: {
-    type: Boolean,
+    type: Number,
     required: [true, "transaction fare is required"],
   },
   new_balance: {
-    type: Boolean,
+    type: Number,
     required: [true, "new balance is required"],
   },
 });
