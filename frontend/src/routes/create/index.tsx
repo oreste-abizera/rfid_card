@@ -38,7 +38,7 @@ const Create: FunctionalComponent = () => {
       let response = await axios.post(`${ENDPOINT}/transactions`, dataToSend);
       if (response) {
         if (response.data?.success) {
-          route("/", true);
+          route("/");
         } else {
           alert("error occured...");
         }

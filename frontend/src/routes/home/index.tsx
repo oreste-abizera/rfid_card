@@ -3,6 +3,7 @@ import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "preact/hooks";
 import style from "./style.css";
 import { route } from "preact-router";
+import Skeleton from "react-loading-skeleton";
 
 const ENDPOINT = "http://localhost:8081";
 
@@ -40,21 +41,25 @@ const Home: FunctionalComponent = () => {
           <th>Transaction fare</th>
           <th>New Balance</th>
         </tr>
-        {loading ? (
-          <div style={{ marginTop: "1rem" }}>Loading...</div>
-        ) : (
-          transactions.map((transaction, index) => (
-            <tr key={index}>
-              <td>{transaction.cardId}</td>
-              <td>{transaction.initial_balance}</td>
-              <td>{transaction.transaction_fare}</td>
-              <td>{transaction.new_balance}</td>
-            </tr>
-          ))
-        )}
+        {transactions.map((transaction, index) => (
+          <tr key={index}>
+            <td>{transaction.cardId}</td>
+            <td>{transaction.initial_balance}</td>
+            <td>{transaction.transaction_fare}</td>
+            <td>{transaction.new_balance}</td>
+          </tr>
+        ))}
       </table>
+      {loading && (
+        <div style={{ width: "100%" }}>
+          <Skeleton
+            count={3}
+            style={{ width: "100%", height: "2rem" }}
+          ></Skeleton>
+        </div>
+      )}
 
-      <button onClick={() => route("/create", true)}>Record transaction</button>
+      <button onClick={() => route("/create")}>Record transaction</button>
     </div>
   );
 };
