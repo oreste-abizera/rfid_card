@@ -13,6 +13,7 @@ module.exports.createTransaction = async (req, res, next) => {
   try {
     let cardFound = await TransactionModel.find({ cardId: req.body.cardId });
     let transaction;
+    let addingTransaction = req.body.transaction_type === "add";
     if (cardFound.length > 0) {
       let error;
       if (!req.body.transaction_fare) error = "transaction_fare is required.";
@@ -22,8 +23,9 @@ module.exports.createTransaction = async (req, res, next) => {
         cardId: cardFound.cardId,
         initial_balance: cardFound.new_balance,
         transaction_fare: req.body.transaction_fare,
-        new_balance:
-          cardFound.new_balance - parseInt(req.body.transaction_fare),
+        new_balance: addingTransaction
+          ? cardFound.new_balance + parseInt(req.body.transaction_fare)
+          : cardFound.new_balance - parseInt(req.body.transaction_fare),
       };
       transaction = await TransactionModel.create(newTransactionData);
     } else {
@@ -34,9 +36,11 @@ module.exports.createTransaction = async (req, res, next) => {
       if (error) return next(new ErrorResponse(error, 400));
       transaction = await TransactionModel.create({
         ...req.body,
-        new_balance:
-          parseInt(req.body.initial_balance) -
-          parseInt(req.body.transaction_fare),
+        new_balance: addingTransaction
+          ? parseInt(req.body.initial_balance) +
+            parseInt(req.body.transaction_fare)
+          : parseInt(req.body.initial_balance) -
+            parseInt(req.body.transaction_fare),
       });
     }
     if (transaction) {

@@ -53,7 +53,7 @@ const Home: FunctionalComponent = () => {
       {loading && (
         <div style={{ width: "100%" }}>
           <Skeleton
-            count={3}
+            count={5}
             style={{ width: "100%", height: "2rem" }}
           ></Skeleton>
         </div>

@@ -11,7 +11,7 @@ const Create: FunctionalComponent = () => {
   const [cardId, setCardId] = useState("");
   const [initialBalance, setinitialBalance] = useState("");
   const [transactionFare, settransactionFare] = useState("");
-  const [type, settype] = useState("remove");
+  const [type, settype] = useState("");
 
   const changeCardId = (e: any) => {
     setCardId(e.target.value);
