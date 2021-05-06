@@ -14,6 +14,9 @@ module.exports.createTransaction = async (req, res, next) => {
     let cardFound = await TransactionModel.find({ cardId: req.body.cardId });
     let transaction;
     if (cardFound.length > 0) {
+      let error;
+      if (!req.body.transaction_fare) error = "transaction_fare is required.";
+      if (error) return next(new ErrorResponse(error, 400));
       cardFound = cardFound[cardFound.length - 1];
       let newTransactionData = {
         cardId: cardFound.cardId,
@@ -24,6 +27,11 @@ module.exports.createTransaction = async (req, res, next) => {
       };
       transaction = await TransactionModel.create(newTransactionData);
     } else {
+      let error;
+      if (!req.body.initial_balance) error = "initial_balance is required.";
+      if (!req.body.transaction_fare) error = "transaction_fare is required.";
+      if (!req.body.cardId) error = "cardId is required.";
+      if (error) return next(new ErrorResponse(error, 400));
       transaction = await TransactionModel.create({
         ...req.body,
         new_balance:
