@@ -11,14 +11,24 @@ module.exports.loadTransactions = async () => {
 
 module.exports.createTransaction = async (req, res, next) => {
   try {
-    let transaction = await TransactionModel.create(req.body);
-    if (transaction) {
-      return res.json({
-        success: true,
-        transaction,
+    let cardFound = await TransactionModel.findOne({ cardId: req.body.cardId });
+    if (cardFound) {
+      console.log("card found.");
+    } else {
+      let transaction = await TransactionModel.create({
+        ...req.body,
+        new_balance:
+          parseInt(req.body.initial_balance) -
+          parseInt(req.body.transaction_fare),
       });
+      if (transaction) {
+        return res.json({
+          success: true,
+          transaction,
+        });
+      }
+      return next(new ErrorResponse("Saving transaction failed."));
     }
-    return next(new ErrorResponse("Saving transaction failed."));
   } catch (error) {
     return next(new ErrorResponse("Saving transaction failed."));
   }
