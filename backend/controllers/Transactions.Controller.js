@@ -4,9 +4,21 @@ const ErrorResponse = require("../utils/ErrorResponse");
 module.exports.loadTransactions = async () => {
   let transactions = await TransactionModel.find();
   if (transactions) {
-    return { success: true, transactions };
+    return { success: true, count: transactions.length, transactions };
   }
   return { success: false };
+};
+
+module.exports.getTransactions = async (req, res, next) => {
+  let transactions = await TransactionModel.find();
+  if (transactions) {
+    return res.json({
+      success: true,
+      count: transactions.length,
+      transactions,
+    });
+  }
+  return next(new ErrorResponse("Failed to get transactions", 404));
 };
 
 module.exports.createTransaction = async (req, res, next) => {
