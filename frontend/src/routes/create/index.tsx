@@ -11,7 +11,7 @@ const Create: FunctionalComponent = () => {
   const [cardId, setCardId] = useState("");
   const [initialBalance, setinitialBalance] = useState("");
   const [transactionFare, settransactionFare] = useState("");
-  const [newBalance, setnewBalance] = useState("");
+  const [type, settype] = useState("remove");
 
   const changeCardId = (e: any) => {
     setCardId(e.target.value);
@@ -22,8 +22,8 @@ const Create: FunctionalComponent = () => {
   const changeTransactionFare = (e: any) => {
     settransactionFare(e.target.value);
   };
-  const changeNewBalance = (e: any) => {
-    setnewBalance(e.target.value);
+  const changetype = (e: any) => {
+    settype(e.target.value);
   };
 
   const recordTransaction = async (e: any) => {
@@ -32,7 +32,7 @@ const Create: FunctionalComponent = () => {
       cardId,
       initial_balance: parseInt(initialBalance),
       transaction_fare: parseInt(transactionFare),
-      new_balance: parseInt(newBalance),
+      transaction_type: type,
     };
     try {
       let response = await axios.post(`${ENDPOINT}/transactions`, dataToSend);
@@ -63,7 +63,7 @@ const Create: FunctionalComponent = () => {
         ></input>
         <input
           type="number"
-          placeholder="initial balance"
+          placeholder="initial balance (Enter 0 if the card exists)"
           required
           value={initialBalance}
           onInput={changeInitialBalance}
@@ -75,15 +75,13 @@ const Create: FunctionalComponent = () => {
           onInput={changeTransactionFare}
           value={transactionFare}
         ></input>
-        <input
-          type="number"
-          placeholder="new balance"
-          required
-          onInput={changeNewBalance}
-          value={newBalance}
-        ></input>
+        <select onInput={changetype} value={type} required>
+          <option>Select transaction type</option>
+          <option value="remove">Remove Amount</option>
+          <option value="add">Add Amount</option>
+        </select>
 
-        <input type="submit">Record</input>
+        <input type="submit" value="Record"></input>
       </form>
       <Link href="/">
         <h4>Return to Home</h4>
