@@ -33,8 +33,27 @@ const Home: FunctionalComponent = () => {
     //
   }, []);
 
+  let cards: Array<String> = transactions.map(
+    (transaction) => transaction.cardId
+  );
+  cards = cards.filter(function (item, pos) {
+    return cards.indexOf(item) == pos;
+  });
   return (
     <div class={style.home}>
+      <h1>Registered cards</h1>
+      {loading ? (
+        <Skeleton count={5}></Skeleton>
+      ) : (
+        <div>
+          {cards.length === 0 && <h6>No registerd cards</h6>}
+          <ol>
+            {cards.map((card) => (
+              <li key={card}>{card}</li>
+            ))}
+          </ol>
+        </div>
+      )}
       <h1>List of transactions</h1>
       <table>
         <tr>
@@ -70,6 +89,7 @@ const Home: FunctionalComponent = () => {
           );
         })}
       </table>
+      {!loading && transactions.length === 0 && <h6>No transactions found.</h6>}
       {loading && (
         <div style={{ width: "100%" }}>
           <Skeleton

@@ -12,7 +12,7 @@ const TransactionSchema = new mongoose.Schema(
     },
     transaction_fare: {
       type: Number,
-      required: [true, "transaction fare is required"],
+      default: 0,
     },
     new_balance: {
       type: Number,

@@ -43,16 +43,15 @@ module.exports.createTransaction = async (req, res, next) => {
     } else {
       let error;
       if (!req.body.initial_balance) error = "initial_balance is required.";
-      if (!req.body.transaction_fare) error = "transaction_fare is required.";
       if (!req.body.cardId) error = "cardId is required.";
       if (error) return next(new ErrorResponse(error, 400));
       transaction = await TransactionModel.create({
         ...req.body,
         new_balance: addingTransaction
           ? parseInt(req.body.initial_balance) +
-            parseInt(req.body.transaction_fare)
+            (parseInt(req.body.transaction_fare) || 0)
           : parseInt(req.body.initial_balance) -
-            parseInt(req.body.transaction_fare),
+            (parseInt(req.body.transaction_fare) || 0),
       });
     }
     if (transaction) {
