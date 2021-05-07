@@ -12,6 +12,8 @@ interface Transaction {
   initial_balance: Number;
   transaction_fare: Number;
   new_balance: Number;
+  timestamp: Date;
+  updated_at: Date;
 }
 
 const Home: FunctionalComponent = () => {
@@ -40,15 +42,33 @@ const Home: FunctionalComponent = () => {
           <th>Initial balance</th>
           <th>Transaction fare</th>
           <th>New Balance</th>
+          <th>Time</th>
         </tr>
-        {transactions.map((transaction, index) => (
-          <tr key={index}>
-            <td>{transaction.cardId}</td>
-            <td>{transaction.initial_balance}</td>
-            <td>{transaction.transaction_fare}</td>
-            <td>{transaction.new_balance}</td>
-          </tr>
-        ))}
+        {transactions.map((transaction, index) => {
+          let d = transaction.timestamp
+            ? new Date(transaction.timestamp)
+            : new Date(2021, 4, 5);
+          let options: any = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: false,
+          };
+          let formatedDate = new Intl.DateTimeFormat("en", options).format(d);
+
+          return (
+            <tr key={index}>
+              <td>{transaction.cardId}</td>
+              <td>{transaction.initial_balance}</td>
+              <td>{transaction.transaction_fare}</td>
+              <td>{transaction.new_balance}</td>
+              <td>{formatedDate}</td>
+            </tr>
+          );
+        })}
       </table>
       {loading && (
         <div style={{ width: "100%" }}>
